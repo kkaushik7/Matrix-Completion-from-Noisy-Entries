@@ -65,9 +65,9 @@ def F_t(X,Y,S,M_E,E,m0,rho):
 	'''
 	(n,r) = X.shape 
 	out1 = np.sum(np.power((np.dot(np.dot(X,S),np.transpose(Y)) - M_E)*E,2))/2  
-	out2 =  rho*G(Y,m0,r) ;
-	out3 =  rho*G(X,m0,r) ;
-	out = out1+out2+out3 ;
+	#out2 =  rho*G(Y,m0,r) ;
+	#out3 =  rho*G(X,m0,r) ;
+	out = out1#+out2+out3 ;
 	return out
 
 
@@ -97,8 +97,8 @@ def gradF_t(X,Y,S,M_E,E,m0,rho):
 	Qx = np.dot(np.dot(np.transpose(X),( (M_E - XSY)*E )),YS) /n
 	Qy = np.dot(np.transpose(Y), np.dot(np.transpose( (M_E - XSY)*E ),XS)) /m
 	
-	W = np.dot(( (XSY - M_E)*E ),YS) + np.dot(X,Qx) + rho * Gp(X,m0,r)
-	Z = np.dot(np.transpose( (XSY - M_E)*E ),XS) + np.dot(Y,Qy) + rho * Gp(Y,m0,r)
+	W = np.dot(( (XSY - M_E)*E ),YS) + np.dot(X,Qx) #+ rho * Gp(X,m0,r)
+	Z = np.dot(np.transpose( (XSY - M_E)*E ),XS) + np.dot(Y,Qy) #+ rho * Gp(Y,m0,r)
 	return W,Z
 
 
