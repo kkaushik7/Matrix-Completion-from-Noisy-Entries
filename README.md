@@ -14,11 +14,10 @@ Format of the input file
 ---
 The input matrix should be written row by row, with elements separated by digits.
 For example, an **I<sub>3</sub> matrix** should be written like this in the input file
-1,0,0
 
-0,1,0
-
-0,0,1
+1,0,0  
+0,1,0  
+0,0,1  
 
 Usage
 ---
