@@ -9,6 +9,7 @@ from numpy.matlib import repmat
 from scipy.sparse import csr_matrix
 
 # Usage: python optSpace.py [input_file_name.txt] [rank] [max_iter]
+# Example usage: python optSpace.py inputMat.txt 1 100
 
 def readMatrix(fileName):
 	'''
@@ -47,8 +48,10 @@ def trim(M,E):
 	return M_Et
 
 
-# Compute G
 def G(X,m0,r):
+	'''
+	A helper function
+	'''
 	z = np.transpose(np.sum(np.power(X,2),axis=1))/(2*m0*r)
 	y = np.power(math.e,(z-1)**2) - 1 
 	y[ (z < 1).nonzero() ] = 0 
@@ -56,8 +59,10 @@ def G(X,m0,r):
 	return out
 	
 
-# Compute the Distortion
 def F_t(X,Y,S,M_E,E,m0,rho):
+	'''
+	Objective Function F(t)
+	'''
 	(n,r) = X.shape 
 	out1 = np.sum(np.power((np.dot(np.dot(X,S),np.transpose(Y)) - M_E)*E,2))/2  
 	out2 =  rho*G(Y,m0,r) ;
@@ -65,8 +70,11 @@ def F_t(X,Y,S,M_E,E,m0,rho):
 	out = out1+out2+out3 ;
 	return out
 
-# Compute Gp
+
 def Gp(X,m0,r):
+	'''
+	A helper function
+	'''
 	z = np.transpose(np.sum(np.power(X,2),axis=1))/(2*m0*r)
 	z = 2*(np.power(math.e,(z-1)**2)) *(z-1) 
 	z[ (z < 0).nonzero() ] = 0
@@ -75,8 +83,10 @@ def Gp(X,m0,r):
 	out = X*repmat(z,1,r) / (m0*r) 
 	return out
 
-# Compute the Gradient of F(t)
 def gradF_t(X,Y,S,M_E,E,m0,rho):
+	'''
+	Compute F'(t)
+	'''
 	(n, r) = X.shape
 	(m, r) = Y.shape
 	
@@ -91,8 +101,11 @@ def gradF_t(X,Y,S,M_E,E,m0,rho):
 	Z = np.dot(np.transpose( (XSY - M_E)*E ),XS) + np.dot(Y,Qy) + rho * Gp(Y,m0,r)
 	return W,Z
 
-# Function to get Optimal S value given X and Y
+
 def getoptS(X,Y,M_E,E):
+	'''
+	Function to get Optimal S value given X and Y
+	'''
 	(n, r) = X.shape
 	C = np.dot(np.dot(np.transpose(X),M_E), Y)  
 	(t1,t2) = C.shape
@@ -108,8 +121,11 @@ def getoptS(X,Y,M_E,E):
 	out = np.reshape(S,(r,r)).transpose() 
 	return out
 
-#Function to perform line search
+
 def getoptT(X,W,Y,Z,S,M_E,E,m0,rho):
+	'''
+	Function to perform line search
+	'''
 	norm2WZ = np.power(norm(W,'fro'),2) + np.power(norm(Z,'fro'),2)
 	f = []
 	f.append( F_t(X, Y,S,M_E,E,m0,rho) )
@@ -124,6 +140,10 @@ def getoptT(X,W,Y,Z,S,M_E,E,m0,rho):
 	out = t 
 	return out
 
+
+'''
+Main Function
+'''
 if __name__ == "__main__":
 	'''
 	Set all the Input Parameters
@@ -162,14 +182,16 @@ if __name__ == "__main__":
 	Y0 = Y0 * np.sqrt(m) 
 	S0 = S0 / eps 
 	print('Starting Gradient Descent')
-	print('Iteration \t Fit Error \n')
+	print('-----------------------------------------------')
+	print('Iteration | \t Fit Error \n')
+	print('-----------------------------------------------')
 	X = X0
 	Y=Y0
 	S = getoptS(X,Y,M_E,E)
 	dist = []
 	XSYprime = np.dot(np.dot(X,S),np.transpose(Y))
 	dist.append(norm( (M_E - XSYprime)*E ,'fro')/np.sqrt(np.count_nonzero(E)))  
-	print('0 \t',dist[0])
+	print('0 |\t',dist[0])
 
 	for i in range(1,niter):
 		# Compute the Gradient 
@@ -184,15 +206,17 @@ if __name__ == "__main__":
 		# Compute the distortion	
 		XSYprime = np.dot(np.dot(X,S),np.transpose(Y))
 		dist.append(norm( (M_E - XSYprime)*E ,'fro')/np.sqrt(np.count_nonzero(E)) )
-		print(i,'\t',dist[i])
+		print(i,'|\t',dist[i])
 		if( dist[i] < tol ):
 			break 
 	S = S /rescale_param 
+	'''
+	Publish results
+	'''
 	reconstructed_matrix = np.dot(np.dot(X,S),np.transpose(Y))
+	print('-----------------------------------------------\n')
 	print('Constructing the original matrix ...')
-	print('\n The Root Mean Squared Error for the reconstructed matrix = ',dist[-1])
+	print('Optimal Objective Function Value F(X,Y,S) = ',dist[-1])
 	np.savetxt('reconstructed_matrix.txt', reconstructed_matrix)
 	print('Saving the output.....')
 	print('The reconstructed matrix is stored in reconstructed_matrix.txt')
-	
-	
