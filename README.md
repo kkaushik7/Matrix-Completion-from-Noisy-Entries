@@ -1,8 +1,8 @@
-A python implementation of the ["Matrix Completion from Noisy Entries"] (http://www.jmlr.org/papers/volume11/keshavan10a/keshavan10a.pdf) paper by Raghunandan Keshavan, Andrea Montanari and Seewong Oh.
+A python implementation of the [Matrix Completion from Noisy Entries](http://www.jmlr.org/papers/volume11/keshavan10a/keshavan10a.pdf) paper by Raghunandan Keshavan, Andrea Montanari and Seewong Oh.
 
 Carried out as a course project for **IE 529 - Statistics for Big Data and Clustering** at the University of Illinois at Urbana-Champaign
 
-This is a python implementation of the MATLAB code available at : https://github.com/airoldilab/SBA/tree/master/OptSpace_matlab
+This is a python implementation of the MATLAB code available at [here](https://github.com/airoldilab/SBA/tree/master/OptSpace_matlab)
 
 Requirements
 ---
@@ -18,9 +18,3 @@ For example, an **I<sub>3</sub> matrix** should be written like this in the inpu
 1,0,0  
 0,1,0  
 0,0,1  
-
-Usage
----
-On the terminal, use the following syntax
-
-**Usage**: `python optSpace.py [input_file_name.txt] [rank] [max_iter]`
