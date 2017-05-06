@@ -18,3 +18,10 @@ For example, an **I<sub>3</sub> matrix** should be written like this in the inpu
 1,0,0  
 0,1,0  
 0,0,1  
+
+Contributors    
+-----     
+* Kaushik Krishnan
+* Logan Courtney
+* Timothy Murray
+* Sagnik Das
